@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:18:23 GMT -->
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <title>认证 - 登录</title>
+  <meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+  <meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+  <link rel="shortcut icon" href="favicon.ico">
+  <link href="${contextPath}/static/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+  <link href="${contextPath}/static/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+
+  <link href="${contextPath}/static/css/animate.min.css" rel="stylesheet">
+  <link href="${contextPath}/static/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+  <!--[if lt IE 9]>
+  <meta http-equiv="refresh" content="0;ie.html" />
+  <![endif]-->
+  <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+  <div>
+    <div>
+
+      <h1 class="logo-name">H+</h1>
+
+    </div>
+    <h3>欢迎使用 大白认证平台</h3>
+
+    <form class="m-t" role="form" action="${contextPath}/auth/ticket"  method="post">
+      <input type="hidden" name="client_id" value="${client_id?if_exists}">
+      <input type="hidden" name="client_secret" value="${client_secret?if_exists}">
+      <input type="hidden" name="refresh_token" value="${refresh_token?if_exists}">
+      refresh_token
+      <input type="hidden" name="username" value="${username?if_exists}">
+      <input type="hidden" name="usericon" value="${usericon?if_exists}">
+      <div class="col-sm-4">
+        <div class="ibox float-e-margins">
+          <div class="ibox-title">
+            <h5>个人资料</h5>
+          </div>
+          <div>
+            <div class="ibox-content no-padding border-left-right">
+              <img alt="image" class="img-responsive" src="${usericon?if_exists}">
+            </div>
+            <div class="ibox-content profile-content">
+              <h4><strong>${username?if_exists}</strong></h4>
+
+              <div class="user-button">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <button type="submit" class="btn btn-primary block full-width m-b">授权</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </form>
+  </div>
+</div>
+<script src="${contextPath}/static/js/jquery.min.js?v=2.1.4"></script>
+<script src="${contextPath}/static/js/bootstrap.min.js?v=3.3.6"></script>
+</body>
+
+
+<!-- Mirrored from www.zi-han.net/theme/hplus/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 20 Jan 2016 14:18:23 GMT -->
+</html>

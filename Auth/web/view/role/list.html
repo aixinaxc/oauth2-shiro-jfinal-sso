@@ -1,0 +1,413 @@
+<#include "/view/layout/static.html"/> <@layout>
+<!-- 加载静态文件 -->
+<link href="${contextPath}/static/css/zTreeStyle/zTreeStyle.css"
+	rel="stylesheet">
+<link href="${contextPath}/static/css/zTree.css" rel="stylesheet">
+<script src="${contextPath}/static/js/jquery.ztree.core.js"></script>
+<script src="${contextPath}/static/js/jquery.ztree.excheck.js"></script>
+<!-- 加载静态文件 -->
+
+<#if error_message?exists>
+<div class="alert alert-danger">
+  ${error_message}
+</div>
+</#if>
+
+<div id="toolbar" class="btn-group">
+	<button id="btn_add" type="button" class="btn btn-outline btn-default">
+		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+	</button>
+	<button id="btn_edit" type="button" class="btn btn-outline btn-default">
+		<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+	</button>
+	<button id="btn_delete" type="button"
+		class="btn btn-outline btn-default ">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+	</button>
+</div>
+
+<!-- 列表 -->
+<table id="table" data-mobile-responsive="true">
+
+</table>
+
+<!-- 添加，修改弹出框 -->
+<div class=" modal   fade" id="myModal" tabindex="-1" role="dialog"
+	aria-labelledby="myModalLabel" data-backdrop="false" aria-hidden="true"
+	data-keyboard="true" data-show="true">
+	<div class="modal-dialog " role="document">
+		<div class="modal-content">
+			<form id="form"  name="form" class="form-horizontal m-t" role="form" action="/res/save"
+				method="post" >
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" aria-hidden="true">
+						<span>×</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">新增</h4>
+				</div>
+				<div class="modal-body">
+
+
+					<div class="tabs-container">
+						<ul class="nav nav-tabs">
+							<li class="active"><a data-toggle="tab" href="#tab-1"
+								aria-expanded="true"> 基本信息</a></li>
+							<li class=""><a data-toggle="tab" href="#tab-2"
+								aria-expanded="false">权限资源</a></li>
+						</ul>
+						<div class="tab-content">
+							<div id="tab-1" class="tab-pane active">
+								<div class="panel-body">
+									<div class="form-group">
+										<input type="hidden" name="role.role_id" class="form-control"
+											id="roleId" placeholder="角色ID"> 
+										<input type="hidden"
+											name="res_ids" class="form-control" id="res_ids"
+											placeholder="权限集">
+									</div>
+									<div class="form-group">
+										<label for="txt_departmentname">角色名称</label> <input
+											type="text" name="role.role_name" class="form-control"
+											id="roleName"  minlength="2" placeholder="角色名称"  required aria-required="true">
+									</div>
+									<div class="form-group">
+										<label for="txt_departmentlevel">角色ICON</label> <input
+											type="text" name="role.role_icon" class="form-control"
+											id="roleIcon" placeholder="角色ICON"  >
+									</div>
+									<div class="form-group">
+										<label for="txt_statu">角色描述</label> <input type="text"
+											name="role.role_description" class="form-control"
+											id="roleDescription" placeholder="角色描述" >
+									</div>
+								</div>
+							</div>
+							<div id="tab-2" class="tab-pane">
+								<div class="panel-body">
+									<ul id="MyTreeDemo" class="ztree"></ul>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+					</button>
+					<button type="button" id="btn_submit" class="btn btn-primary" 
+						>
+						<span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript">
+	toastr.options.positionClass = 'toast-top-right';
+	
+</script>
+
+<script>
+	$(function() {
+
+		//1.初始化Table
+		var oTable = new TableInit();
+		oTable.Init();
+
+		//2.初始化Button的点击事件
+		var oButtonInit = new ButtonInit();
+		oButtonInit.Init();
+
+	});
+
+	var TableInit = function() {
+		var oTableInit = new Object();
+		//初始化Table
+		oTableInit.Init = function() {
+			$('#table').bootstrapTable({
+				url : '/role/listdata', //请求后台的URL（*）
+				method : 'post', //请求方式（*）
+				contentType : "application/x-www-form-urlencoded",
+				toolbar : '#toolbar', //工具按钮用哪个容器
+				striped : true, //是否显示行间隔色
+				cache : false, //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+				pagination : true, //是否显示分页（*）
+				sortable : false, //是否启用排序
+				sortOrder : "asc", //排序方式
+				queryParams : oTableInit.queryParams,//传递参数（*）
+				sidePagination : "server", //分页方式：client客户端分页，server服务端分页（*）
+				pageNumber : 1, //初始化加载第一页，默认第一页
+				pageSize : 20, //每页的记录行数（*）
+				pageList : [ 10, 25, 50, 100 ], //可供选择的每页的行数（*）
+				strictSearch : true,
+				showColumns : true,
+				showRefresh : true, //是否显示刷新按钮 
+				clickToSelect : true, //是否启用点击选中行
+				height : 500, //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+				uniqueId : "resId", //每一行的唯一标识，一般为主键列
+				cardView : false, //是否显示详细视图
+				detailView : false, //是否显示父子表
+				iconSize : "outline",
+				queryParams : function(params) {
+					var temp = { //这里的键的名字和控制器的变量名必须一直，这边改动，控制器也需要改成一样的
+						pageSize : params.limit, //页面大小
+						pageNumber : params.offset, //页码
+					};
+					return temp;
+				},
+				columns : [ {
+					field : 'state',
+					checkbox : true,
+				//formatter : stateFormatter
+				}, {
+					field : 'roleName',
+					title : '角色名称',
+					editable : true
+				}, {
+					field : 'roleIcon',
+					title : '角色ICON',
+					editable : true
+				}, {
+					field : 'roleDescription',
+					title : '角色描述',
+					editable : true
+				}, ]
+			});
+		};
+
+		/* function stateFormatter(value, row, index) {
+
+			return value;
+		} */
+
+		return oTableInit;
+	};
+
+	var ButtonInit = function() {
+		var oInit = new Object();
+		var postdata = {};
+
+		oInit.Init = function() {
+			//初始化页面上面的按钮事件
+			$("#btn_add").click(function() {
+				$("input").val("");
+				$("#myModalLabel").text("新增");
+				
+				//获得权限
+				getResByid("");
+				
+				$('#myModal').modal();
+			});
+
+			$("#btn_edit").click(
+					function() {
+						var arrselections = $("#table").bootstrapTable(
+								'getSelections');
+						if (arrselections.length < 1) {
+							toastr.warning('请选择一条数据');
+							return;
+						}
+
+						if (arrselections.length > 1) {
+							toastr.warning('只能选择一行进行编辑');
+							return;
+						}
+						$("#myModalLabel").text("编辑");
+						$("#roleId").val(arrselections[0].roleId);
+						$("#roleName").val(arrselections[0].roleName);
+						$("#roleIcon").val(arrselections[0].roleIcon);
+						$("#roleDescription").val(
+								arrselections[0].roleDescription);
+
+                        //获得权限
+						getResByid(arrselections[0].roleId);
+
+						$('#myModal').modal();
+					});
+           
+			$("#btn_submit").click(	
+			//alert("修改、添加");
+			function() {
+			
+			    if(!$("#form").valid()){
+                     return;
+                 }
+			    if($("#res_ids").val() == ""){
+			        toastr.warning('请选择权限');
+					return;
+			    }
+			
+				$.ajax({
+					type : "post",
+					url : "/role/save",
+					data : $('#form').serialize(),
+					success : function(data, status) {
+
+						if (data.result == "success") {
+						    $('#myModal').modal('hide');
+							//alert(data.result);
+							swal("修改成功！", "修改成功。", "success");
+							$("#table").bootstrapTable('refresh');
+						} else {
+							swal("修改失败！", "修改失败。", "error");
+						}
+					},
+					error : function() {
+						toastr.error('Error');
+					},
+					complete : function() {
+
+					}
+
+				});
+			});
+
+			$("#btn_delete").click(
+					function() {
+						//alert("删除");
+						var arrselections = $("#table").bootstrapTable(
+								'getSelections');
+						if (arrselections.length < 1) {
+							toastr.warning('请选择至少一条数据');
+							return;
+						}
+                        
+						swal({
+							title : "您确定要删除这条信息吗",
+							text : "删除后将无法恢复，请谨慎操作！",
+							type : "warning",
+							showCancelButton : true,
+							confirmButtonColor : "#DD6B55",
+							confirmButtonText : "是的，我要删除！",
+							cancelButtonText : "让我再考虑一下…",
+							closeOnConfirm : false,
+						}, function() {
+							$.ajax({
+								type : "post",
+								url : "/role/delete",
+								data : {
+									"data" : JSON.stringify(arrselections)
+								},
+								success : function(data, status) {
+									if (data.result == "success") {
+										swal("删除成功！", "您已经永久删除了这条信息。",
+												"success");
+										$("#table").bootstrapTable('refresh');
+									}else{
+									
+									
+									}
+								},
+								error : function() {
+									toastr.error('Error');
+								},
+								complete : function() {
+
+								}
+
+							});
+
+						});
+
+					});
+		};
+
+		return oInit;
+	};
+</script>
+
+<SCRIPT type="text/javascript">
+	var setting = {
+		check : {
+			enable : true
+		},
+		data : {
+			simpleData : {
+				enable : true
+			}
+		},
+		callback : {
+			onCheck : onTreeClick
+		}
+	};
+	var zNodes;
+
+	var code;
+
+	function setCheck() {
+		var zTree = $.fn.zTree.getZTreeObj("MyTreeDemo"), py = $("#py").attr(
+				"checked") ? "p" : "", sy = $("#sy").attr("checked") ? "s" : "", pn = $(
+				"#pn").attr("checked") ? "p" : "", sn = $("#sn")
+				.attr("checked") ? "s" : "", type = {
+			"Y" : ps,
+			"N" : ps
+		};
+		zTree.setting.check.chkboxType = type;
+		showCode('setting.check.chkboxType = { "Y" : "' + type.Y + '", "N" : "'
+				+ type.N + '" };');
+	}
+	function showCode(str) {
+		if (!code)
+			code = $("#code");
+		code.empty();
+		code.append("<li>" + str + "</li>");
+	}
+
+	function getResByid(id) {
+		$.ajax({
+			type : "post",
+			url : "/role/ress",
+			data : {
+				resId : id
+			},
+			success : function(data, status) {
+				//alert(data[0].id);
+				zNodes = data;
+				$.fn.zTree.init($("#MyTreeDemo"), setting, zNodes);
+				setCheck();
+				$("#py").bind("change", setCheck);
+				$("#sy").bind("change", setCheck);
+				$("#pn").bind("change", setCheck);
+				$("#sn").bind("change", setCheck);
+			},
+			error : function() {
+				toastr.error('Error');
+			},
+			complete : function() {
+
+			}
+
+		});
+	}
+	
+	function onTreeClick(e, treeId, treeNode) {
+
+		var treeObj = $.fn.zTree.getZTreeObj("MyTreeDemo"), nodes = treeObj
+				.getCheckedNodes(true), v = "";
+		var arrayObj;
+
+		for (var i = 0; i < nodes.length; i++) {
+			if (i == 0) {
+				v = nodes[i].id
+			} else {
+				v = v + "," + nodes[i].id;
+			}
+		}
+		$("#res_ids").val(v);
+	}
+</SCRIPT>
+
+
+
+
+
+
+<!--end页面内容  -->
+<#macro greet> </#macro> </@layout>

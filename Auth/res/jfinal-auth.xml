@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.auth>
+	<login>
+		<url>/</url>
+		
+	</login>
+	<error>
+		<url>/com.apache.oltu.oauth2.error/com.auth</url>
+	</error>
+	<home>
+		<url>/version</url>
+	</home>
+	<auth>
+		<url>/auth/auth</url>
+		<url>/auth/accessToken</url>
+		<url>/auth/refreshToken</url>
+	</auth>
+</com.auth>
