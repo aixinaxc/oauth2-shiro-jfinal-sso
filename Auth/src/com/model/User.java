@@ -13,7 +13,14 @@ public class User extends BaseUser<User> {
 	public static final User dao = new User();
 
 	public boolean isRegisterUser(String username,String password){
-		String md5 = MD5Unit.GetMD5Code(password) + MyConstant.MD5;
+		if(Empty.isEmpty(username) || Empty.isEmpty(password)){
+			return false;
+		}
+		User u = dao.findUserByName(username);
+		if(u == null){
+			return false;
+		}
+		String md5 = MD5Unit.GetMD5Code(password) + u.getUserSlat();
 		md5 = MD5Unit.GetMD5Code(md5);
         String sql = "SELECT * FROM "+MyConstant.TABLE_PREFIX+"user WHERE user_username = ? AND user_pwd = ?";
 		User user = dao.findFirst(sql,username,md5);
@@ -29,7 +36,11 @@ public class User extends BaseUser<User> {
 		if(Empty.isEmpty(username) || Empty.isEmpty(password)){
 			return null;
 		}
-		String md5 = MD5Unit.GetMD5Code(password) + MyConstant.MD5;
+		User u = dao.findUserByName(username);
+		if(u == null){
+			return null;
+		}
+		String md5 = MD5Unit.GetMD5Code(password) + u.getUserSlat();
 		md5 = MD5Unit.GetMD5Code(md5);
 		String sql = "SELECT * FROM "+MyConstant.TABLE_PREFIX+"user WHERE user_username = ? AND user_pwd = ?";
 		return dao.findFirst(sql,username,md5);

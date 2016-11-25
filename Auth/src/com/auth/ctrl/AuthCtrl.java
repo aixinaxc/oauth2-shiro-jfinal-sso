@@ -196,7 +196,7 @@ public class AuthCtrl extends BaseCtrl{
                     .buildJSONMessage();
             getResponse().setStatus(response.getResponseStatus());
             render(new JsonRender(response.getBody()).forIE());
-            getRequest();
+
 
 
         } catch (OAuthSystemException e) {
