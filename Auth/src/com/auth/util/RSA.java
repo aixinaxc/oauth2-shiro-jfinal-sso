@@ -45,25 +45,9 @@ public class RSA {
 	}
 
 	private static final String RSA_PUBLICE = 
-			"MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDP2oMaCBH8DyfXgZCF/UwChRRy"+
-			"M5EtrlubDu5LzKoh4R24DJCbdfYBs9gfn/Z7tHt2PfLFPLF+2s8wL7VflONNq58y"+
-			"vUNogIrW7Gcwe/zt8sh7ZyWz7Ua6o2TqLNELDOkq4b5HkQ/VBWJh6VbrUQw/0HKn"+
-			"2k3+ldWuVcTPxwDGiwIDAQAB";
+			"";
 	private static final String RSA_PRIVATE = 
-			"MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAM/agxoIEfwPJ9eB"+
-			"kIX9TAKFFHIzkS2uW5sO7kvMqiHhHbgMkJt19gGz2B+f9nu0e3Y98sU8sX7azzAv"+
-			"tV+U402rnzK9Q2iAitbsZzB7/O3yyHtnJbPtRrqjZOos0QsM6SrhvkeRD9UFYmHp"+
-			"VutRDD/QcqfaTf6V1a5VxM/HAMaLAgMBAAECgYBDLs7XWCpv/XoURzWuiWvLGLa+"+
-			"Hvra+BN18AKID5QiNUBE4BLRnPQyIq5Fso+Z9oE9e9J/fBmm9hSn75PBXD+HoqZc"+
-			"AtqCEEmvwbE+PJo2tax6wYW21UEUagd3qvthuk65v8bVWsBGLl1xN+Z144gufFOb"+
-			"CGzdnXyWudL6L2gzKQJBAPy7P/WANPUJgdqNDRLcW8QNwhblS7apvEOfiVvfXaMc"+
-			"p3Ex5Vt0mtKfSUwPzK56lCE0fjmKaM+Z2AIEVs//1V8CQQDSiq3qnzZ1vishMCxn"+
-			"ZMOKKdd9d/VR8FlZkp/JWp3KeYYg6YW7kyrXqBdBtmDTWAlKQhLoUkxaTHa9mOfU"+
-			"WdJVAkEAzgcQIuC7Sy7O7w2hpMiC/paArQ2L5YMFeNMrtPuoZ/pJ/htA8IdkV2OG"+
-			"6zzODUbcTx1t8RaGTwcJcst6weG7XQJAfinsHfRaRiQ25CRh93NCWcDJCL6hmwBU"+
-			"CoD6j0Zl17cK0R4erVB7E8/+X7pSO1M9/emqOt1WM6YuYV8HTRCmIQJBAKorNzgD"+
-			"P62wmXGt/BJDs3VqnGstbV0LRj+BSNkdnuA5eYSeJ/rhtKu7ePHDcbWOKqp/zldS"+
-			"Kuid0rwJegnAhAs=";
+			"";
 
 	private static final String ALGORITHM = "RSA";
 
