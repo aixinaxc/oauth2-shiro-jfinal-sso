@@ -69,7 +69,7 @@ public class AppCtrl extends BaseCtrl {
 
     @RequiresPermissions("/app/delete")
     public void delete(){
-        List<App> data = JSON.parseArray(getPara("data").toString(),App.class);
+        List<App> data = JSON.parseArray(getPara("data"),App.class);
         for(int i=0;i<data.size();i++){
             App.dao.delete(data);
         }

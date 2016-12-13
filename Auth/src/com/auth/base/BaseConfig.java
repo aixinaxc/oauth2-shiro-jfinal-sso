@@ -6,7 +6,9 @@ package com.auth.base;
 public class BaseConfig {
     //OAUTH2基础配置
     public final static int CODE_EXPIRE = 60;//单位秒
-    public final static int REFRESH_TOKEN = 60*60*24;//单位秒
+    public final static int EXPIRES_IN = 60*60*24;//单位秒
+    public final static int MULTIPLE = 10;
+
     public final static String REDIRECT_URI = "/client/auth";
 
     public final static String OPEN_ID = "openId";//保存用户的userid

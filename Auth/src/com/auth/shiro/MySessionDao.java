@@ -30,7 +30,7 @@ public class MySessionDao extends CachingSessionDAO{
 		Serializable sessionId = generateSessionId(arg0);
 		assignSessionId(arg0, sessionId);
 		Cache codeCache = Redis.use("auth");
-		codeCache.setex("sessionId:" + sessionId,BaseConfig.SESSION_EXPIRE, arg0);
+		codeCache.set("sessionId:" + sessionId, arg0);
 		return sessionId;
 	}
 

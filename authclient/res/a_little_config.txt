@@ -1,5 +1,5 @@
-jdbcUrl = jdbc:mysql://192.168.2.150/auth?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-user = sa
-password = 12345678
+jdbcUrl = jdbc:mysql://192.168.2.150/dabai?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user = db
+password = 123456
 devMode = true
 

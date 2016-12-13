@@ -176,29 +176,9 @@ public class AuthCtrl extends BaseCtrl{
                 return;
             }
 
-            // 生成Access Token
-            OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(
-                    new MD5Generator());
-            String accessToken = oauthIssuerImpl.accessToken();
-            String refreshToken = oauthIssuerImpl.refreshToken();
-
-            //缓存accessToken和refreshToken到redis
-            codeCache.setex("accessToken:"+accessToken,BaseConfig.REFRESH_TOKEN,accessToken);
-            codeCache.setex("refreshToken:"+refreshToken,BaseConfig.REFRESH_TOKEN,refreshToken);
-
-            // 生成OAuth响应
-            OAuthResponse response = OAuthASResponse
-                    .tokenResponse(HttpServletResponse.SC_OK)
-                    .setAccessToken(accessToken)
-                    .setRefreshToken(refreshToken)
-                    .setExpiresIn(BaseConfig.REFRESH_TOKEN+"")
-                    .setParam(BaseConfig.OPEN_ID, userId)
-                    .buildJSONMessage();
+            OAuthResponse response = creatToken(userId);
             getResponse().setStatus(response.getResponseStatus());
             render(new JsonRender(response.getBody()).forIE());
-
-
-
         } catch (OAuthSystemException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -240,24 +220,7 @@ public class AuthCtrl extends BaseCtrl{
                 renderJson(response.getBody());
             }
 
-            // 生成Access Token
-            OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(
-                    new MD5Generator());
-             String accessToken = oauthIssuerImpl.accessToken();
-             String refreshToken = oauthIssuerImpl.refreshToken();
-            //boolean a = Oauth2.dao.save(accessToken, refreshToken);
-
-            //缓存accessToken和refreshToken到redis
-            codeCache.setex("accessToken:"+accessToken,BaseConfig.REFRESH_TOKEN,accessToken);
-            codeCache.setex("refreshToken:"+refreshToken,BaseConfig.REFRESH_TOKEN,refreshToken);
-            // 生成OAuth响应
-            OAuthResponse response = OAuthASResponse
-                    .tokenResponse(HttpServletResponse.SC_OK)
-                    .setAccessToken(accessToken)
-                    .setRefreshToken(refreshToken)
-                    .setExpiresIn(BaseConfig.REFRESH_TOKEN+"")
-                    .setParam(BaseConfig.OPEN_ID, oauthRequest.getParam(OAuth.OAUTH_CODE))
-                    .buildJSONMessage();
+            OAuthResponse response = creatToken(oauthRequest.getParam(BaseConfig.OPEN_ID));
             getResponse().setStatus(response.getResponseStatus());
             renderJson(response.getBody());
 
@@ -266,6 +229,39 @@ public class AuthCtrl extends BaseCtrl{
         } catch (OAuthProblemException e) {
             e.printStackTrace();
         }
+    }
+
+
+    /**
+     * 创建accessToken 和 refreshToken
+     * @param userId 用户id
+     * @return OAuthResponse
+     */
+    private OAuthResponse creatToken(String userId){
+        // 生成Access Token
+        OAuthIssuer oauthIssuerImpl = new OAuthIssuerImpl(
+                new MD5Generator());
+
+        try {
+            String accessToken =  oauthIssuerImpl.accessToken();
+            String refreshToken = oauthIssuerImpl.refreshToken();
+
+            //缓存accessToken和refreshToken到redis
+            codeCache.setex("accessToken:"+accessToken,BaseConfig.EXPIRES_IN,accessToken);
+            codeCache.setex("refreshToken:"+refreshToken,BaseConfig.EXPIRES_IN * BaseConfig.MULTIPLE,refreshToken);
+            // 生成OAuth响应
+            OAuthResponse response = OAuthASResponse
+                    .tokenResponse(HttpServletResponse.SC_OK)
+                    .setAccessToken(accessToken)
+                    .setRefreshToken(refreshToken)
+                    .setExpiresIn(BaseConfig.EXPIRES_IN+"")
+                    .setParam(BaseConfig.OPEN_ID, userId)
+                    .buildJSONMessage();
+            return response;
+        } catch (OAuthSystemException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

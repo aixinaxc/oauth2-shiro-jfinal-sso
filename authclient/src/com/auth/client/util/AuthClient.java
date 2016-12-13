@@ -179,7 +179,7 @@ public class AuthClient {
      * @param refreshToken  更新令牌
      * @return  OauthPojo 需要做判空处理
      */
-    public static OauthPojo refreshToken(String refreshToken){
+    public static OauthPojo refreshToken(String refreshToken,String userId){
         if(Empty.isEmpty(refreshToken)){
             return null;
         }
@@ -195,6 +195,7 @@ public class AuthClient {
                     .setClientSecret(CLIENT_SECRET)
                     .setRedirectURI(REDIRECT_URI)
                     .setRefreshToken(refreshToken)
+                    .setParameter(OPEN_ID,userId)
                     .buildQueryMessage();
 
             //获得access_token的请求数据
